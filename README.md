@@ -1,2 +1,4 @@
 # podcast_mgmt
-podcast downloader
+podcast rss downloader
+
+by Mencho 2017
