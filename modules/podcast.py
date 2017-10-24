@@ -4,7 +4,6 @@
 
   - Last Update: 24/10/2017
 ----------------------------------------
-
 """
 import os
 import csv
@@ -155,46 +154,46 @@ class Podcast:
                            u'Es la Ma\xf1ana de Federico']
         """
         warnings.filterwarnings("ignore", category=UnicodeWarning)
-
-        published, name, link, title = self.podcast_list[0]
-
         now = datetime.datetime.now()
-        if self.podcast_list != []:
-            line_file = (published + ';' + title + ';' + name + ';' + link).encode("utf-8") 
-            if line_file in open(self.download_log).read():
-                pass
-            else:
-                title = unicodedata.normalize('NFKD', title).encode('ascii', 'ignore')
-                download_folder = os.path.join('downloads', title)
-                if not os.path.exists(download_folder): 
-                    os.makedirs(download_folder)
-                try:
-                    published = str(parser.parse(published))[:10]
-                except IOError as error:
-                    print 'Error' + (error) + ': File - ' + str(title)
-                download_folder = os.path.join(download_folder, published)
-                if not os.path.exists(download_folder): 
-                    os.makedirs(download_folder)
-                namefile_unicode = link[link.rfind('/')+1:]
-                namefile_str = unicodedata.normalize('NFKD', 
-                                                     namefile_unicode).encode('ascii', 'ignore')
-                namefile_str = namefile_str.decode('utf-8', 'ignore').encode("utf-8")
-                if '.mp3' in namefile_str:
-                    len_name = namefile_str.index('.mp3')
-                elif '.MP3' in namefile_str:
-                    len_name = namefile_str.index('.MP3')
-                namefile_str = namefile_str[:len_name + 4]
-                fileoutput = os.path.join(download_folder, namefile_str)
-                name = unicodedata.normalize('NFKD', name).encode('ascii', 'ignore')
-                print  '-' + str(published) + '; ' + name
-                ## downlink
-                download_file(link, fileoutput) 
-                ## tagging
-                mp3_tagging(fileoutput, self.podcast_list[0])
-                ## write log
-                write_file(self.download_log, line_file)
-                end = datetime.datetime.now()
-                print 'Download Time = ' + str(end-now) + '\r'
+
+        for podcast_file in self.podcast_list:
+            published, name, link, title = podcast_file
+            if self.podcast_list != []:
+                line_file = (published + ';' + title + ';' + name + ';' + link).encode("utf-8") 
+                if line_file in open(self.download_log).read():
+                    pass
+                else:
+                    title = unicodedata.normalize('NFKD', title).encode('ascii', 'ignore')
+                    download_folder = os.path.join('downloads', title)
+                    if not os.path.exists(download_folder): 
+                        os.makedirs(download_folder)
+                    try:
+                        published = str(parser.parse(published))[:10]
+                    except IOError as error:
+                        print 'Error' + (error) + ': File - ' + str(title)
+                    download_folder = os.path.join(download_folder, published)
+                    if not os.path.exists(download_folder): 
+                        os.makedirs(download_folder)
+                    namefile_unicode = link[link.rfind('/')+1:]
+                    namefile_str = unicodedata.normalize('NFKD', 
+                                                         namefile_unicode).encode('ascii', 'ignore')
+                    namefile_str = namefile_str.decode('utf-8', 'ignore').encode("utf-8")
+                    if '.mp3' in namefile_str:
+                        len_name = namefile_str.index('.mp3')
+                    elif '.MP3' in namefile_str:
+                        len_name = namefile_str.index('.MP3')
+                    namefile_str = namefile_str[:len_name + 4]
+                    fileoutput = os.path.join(download_folder, namefile_str)
+                    name = unicodedata.normalize('NFKD', name).encode('ascii', 'ignore')
+                    print  '-' + str(published) + '; ' + name
+                    ## downlink
+                    download_file(link, fileoutput) 
+                    ## tagging
+                    mp3_tagging(fileoutput, podcast_file)
+                    ## write log
+                    write_file(self.download_log, line_file)
+                    end = datetime.datetime.now()
+                    print 'Download Time = ' + str(end-now) + '\r'
         return None
 
 
