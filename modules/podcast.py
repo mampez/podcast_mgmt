@@ -2,11 +2,11 @@
 ----------------------------------------
   - Developed by Mencho: 24/10/2017
 
-  - Last Update: 24/10/2017
+  - Last Update: 31/10/2017
 ----------------------------------------
+
 """
 import os
-import csv
 import datetime
 import warnings
 import unicodedata
@@ -73,13 +73,15 @@ class Podcast:
 
            podcast_data = [publishedDate, 
                           entry.enclosures[0]['href'], 
-                          rss.feed.title]
+                          rss.feed.title
+                          ]
         
            podcast_data = [u'Thu, 3 Aug 2017 11:09:51 +0100', 
                            u'Tertulia de Federico: M\xe1s ataques de las CUP contra el turismo', 
                            u'http://audios.esradio.fm/espana/17/08/03/
                              tertulia-de-federico-mas-ataques-de-las-cup-contra-el-turismo-116287', 
-                           u'Es la Ma\xf1ana de Federico']
+                           u'Es la Ma\xf1ana de Federico'
+                          ]
         """
         podcast_data = []
 
@@ -88,7 +90,8 @@ class Podcast:
                 try:
                     podcast_data = [entry.published, entry.title, 
                                     entry.enclosures[0]['href'], 
-                                    self.rss[0].feed.title]
+                                    self.rss[0].feed.title
+                                   ]
                 except IOError as error:
                     print 'Error' + (error) + ': File - ' + str(entry.title)
                 self.podcast_list.append(podcast_data)
@@ -114,13 +117,15 @@ class Podcast:
 
            podcast_data = [publishedDate, 
                           entry.enclosures[0]['href'], 
-                          rss.feed.title]
+                          rss.feed.title
+                          ]
         
            podcast_data = [u'Thu, 3 Aug 2017 11:09:51 +0100', 
                            u'Tertulia de Federico: M\xe1s ataques de las CUP contra el turismo', 
                            u'http://audios.esradio.fm/espana/17/08/03/
                              tertulia-de-federico-mas-ataques-de-las-cup-contra-el-turismo-116287', 
-                           u'Es la Ma\xf1ana de Federico']
+                           u'Es la Ma\xf1ana de Federico'
+                          ]
         """
         podcast_data = []
 
@@ -128,7 +133,8 @@ class Podcast:
             try:
                 podcast_data = [entry.published, entry.title, 
                                 entry.enclosures[0]['href'], 
-                                self.rss[0].feed.title]
+                                self.rss[0].feed.title
+                               ]
             except IOError as error:
                 print 'Error' + (error) + ': File - ' + str(entry.title)
             self.podcast_list.append(podcast_data)
@@ -216,6 +222,7 @@ def write_file(file_name, line):
     return None
 
 def mp3_tagging(file_input, podcast_list):
+
     """Tagging mp3 files
        
        keyword arguments:
@@ -234,6 +241,7 @@ def mp3_tagging(file_input, podcast_list):
     tag['album'] = unicodedata.normalize('NFKD', podcast_list[3]).encode('ascii', 'ignore')
     tag['genre'] = 'Podcast'
     tag.save(v2_version=3)
+
     return None
 
 def download_file(url, outputfile):
