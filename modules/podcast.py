@@ -2,7 +2,7 @@
 ----------------------------------------
   - Developed by Mencho: 24/10/2017
 
-  - Last Update: 31/10/2017
+  - Last Update: 02/11/2017
 ----------------------------------------
 
 """
@@ -23,7 +23,7 @@ import mutagen
 TIMEOUT = 120
 
 
-class Podcast:
+class Podcast(object):
     """Podcast class"""
     
     def __init__(self, url):
