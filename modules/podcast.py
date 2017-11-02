@@ -4,7 +4,6 @@
 
   - Last Update: 02/11/2017
 ----------------------------------------
-
 """
 import os
 import datetime
@@ -44,6 +43,7 @@ class Podcast(object):
             line_file = str('podcast_date' + ';' + 'podcast_title' + 'Name' + ';' + 'Link' + ';')
             write_file(self.download_log, line_file.encode("UTF-8"))   
 
+
     def get_rss(self):
         """Donwload and parse rss file
 
@@ -53,6 +53,7 @@ class Podcast(object):
         rssfiles = []
         rssfiles.append(feedparser.parse(self.url))
         return rssfiles
+
 
     def get_links_filter(self, keyword, number_links):
         """Generate podcast_list with a number_links
@@ -100,6 +101,7 @@ class Podcast(object):
                         return self.podcast_list
         return self.podcast_list
 
+
     def get_links_all(self, number_links):
         """Generate podcast_list with a number_links
            for download in based on a rss list. 
@@ -142,6 +144,7 @@ class Podcast(object):
                 if len(self.podcast_list) == number_links: 
                     return self.podcast_list
         return self.podcast_list
+
 
     def podcast_download(self):
         """Manage the podcast donwload, record in a 
@@ -221,6 +224,7 @@ def write_file(file_name, line):
         print error
     return None
 
+
 def mp3_tagging(file_input, podcast_list):
 
     """Tagging mp3 files
@@ -241,8 +245,8 @@ def mp3_tagging(file_input, podcast_list):
     tag['album'] = unicodedata.normalize('NFKD', podcast_list[3]).encode('ascii', 'ignore')
     tag['genre'] = 'Podcast'
     tag.save(v2_version=3)
-
     return None
+
 
 def download_file(url, outputfile):
     """Download file (GET URL)
