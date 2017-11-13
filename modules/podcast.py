@@ -18,10 +18,6 @@ from mutagen.easyid3 import EasyID3
 import mutagen
 
 
-## Timeout Requests
-TIMEOUT = 120
-
-
 class Podcast(object):
     """Podcast class"""
     
@@ -33,15 +29,19 @@ class Podcast(object):
         self.podcast_list = []
 
         ## Create folders
-        if not os.path.exists('downloads'):
-            os.makedirs('downloads')
-        if not os.path.exists('logs'):
-            os.makedirs('logs')
-        self.download_log = os.path.join('logs', 'log_download.csv')
-        if not os.path.exists(self.download_log):    
-            file(self.download_log, 'w').close()
-            line_file = str('podcast_date' + ';' + 'podcast_title' + 'Name' + ';' + 'Link' + ';')
-            write_file(self.download_log, line_file.encode("UTF-8"))   
+        try:
+            if not os.path.exists('downloads'):
+                os.makedirs('downloads')
+            if not os.path.exists('logs'):
+                os.makedirs('logs')
+            self.download_log = os.path.join('logs', 'log_download.csv')
+            if not os.path.exists(self.download_log):    
+                file(self.download_log, 'w').close()
+                line_file = str('podcast_date' + ';' + 'podcast_title' + \
+                                'Name' + ';' + 'Link' + ';')
+                write_file(self.download_log, line_file.encode("UTF-8"))
+        except IOError as err:
+            print err 
 
 
     def get_rss(self):
@@ -51,6 +51,7 @@ class Podcast(object):
         RSS list 
         """
         rssfiles = []
+        
         rssfiles.append(feedparser.parse(self.url))
         return rssfiles
 
@@ -93,13 +94,16 @@ class Podcast(object):
                                     entry.enclosures[0]['href'], 
                                     self.rss[0].feed.title
                                    ]
-                except IOError as error:
-                    print 'Error' + (error) + ': File - ' + str(entry.title)
-                self.podcast_list.append(podcast_data)
-                if number_links != 0:
-                    if len(self.podcast_list) == number_links: 
-                        return self.podcast_list
-        return self.podcast_list
+                except IOError as err:
+                    print err
+                except UnicodeDecodeError as err:
+                    print err
+                else:
+                    self.podcast_list.append(podcast_data)
+                    if number_links != 0:
+                        if len(self.podcast_list) == number_links: 
+                            return None
+        return None
 
 
     def get_links_all(self, number_links):
@@ -137,13 +141,16 @@ class Podcast(object):
                                 entry.enclosures[0]['href'], 
                                 self.rss[0].feed.title
                                ]
-            except IOError as error:
-                print 'Error' + (error) + ': File - ' + str(entry.title)
-            self.podcast_list.append(podcast_data)
-            if number_links != 0:
-                if len(self.podcast_list) == number_links: 
-                    return self.podcast_list
-        return self.podcast_list
+            except IOError as err:
+                print err
+            except UnicodeDecodeError as err:
+                print err
+            else:
+                self.podcast_list.append(podcast_data)
+                if number_links != 0:
+                    if len(self.podcast_list) == number_links: 
+                        return None
+        return None
 
 
     def podcast_download(self):
@@ -241,10 +248,14 @@ def mp3_tagging(file_input, podcast_list):
     except mutagen.id3.ID3NoHeaderError:
         tag = mutagen.File(file_input, easy=True)
         tag.add_tags()
-    tag['title'] = unicodedata.normalize('NFKD', podcast_list[1]).encode('ascii', 'ignore')
-    tag['album'] = unicodedata.normalize('NFKD', podcast_list[3]).encode('ascii', 'ignore')
-    tag['genre'] = 'Podcast'
-    tag.save(v2_version=3)
+    try:
+        tag['title'] = unicodedata.normalize('NFKD', podcast_list[1]).encode('ascii', 'ignore')
+        tag['album'] = unicodedata.normalize('NFKD', podcast_list[3]).encode('ascii', 'ignore')
+        tag['genre'] = 'Podcast'
+    except UnicodeDecodeError as err:
+        print err
+    else:
+        tag.save(v2_version=3)
     return None
 
 
@@ -259,7 +270,7 @@ def download_file(url, outputfile):
        None
     """
     try:
-        req = requests.get(url, stream=True, timeout=TIMEOUT)
+        req = requests.get(url, stream=True, timeout=120)
         try:
             with open(outputfile, 'wb') as file_download:
                 for chunk in req.iter_content(chunk_size=1024): 
