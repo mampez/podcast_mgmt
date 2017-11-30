@@ -2,7 +2,7 @@
 ----------------------------------------
   - Developed by Mencho: 24/10/2017
 
-  - Last Update: 02/11/2017
+  - Last Update: 30/11/2017
 ----------------------------------------
 """
 import os
@@ -201,7 +201,7 @@ class Podcast(object):
                     namefile_str = namefile_str[:len_name + 4]
                     fileoutput = os.path.join(download_folder, namefile_str)
                     name = unicodedata.normalize('NFKD', name).encode('ascii', 'ignore')
-                    print  '-' + str(published) + '; ' + name
+                    print  str(published) + '; ' + name
                     ## downlink
                     download_file(link, fileoutput) 
                     ## tagging
@@ -209,7 +209,7 @@ class Podcast(object):
                     ## write log
                     write_file(self.download_log, line_file)
                     end = datetime.datetime.now()
-                    print 'Download Time = ' + str(end-now) + '\r'
+                    print '\r' + 'Download Time = ' + str(end-now) + '\r'
         return None
 
 
