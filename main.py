@@ -11,7 +11,6 @@ LINKS_ALL = ['http://feeds.99percentinvisible.org/99percentinvisible',
 def main():
     """ Testing podcast downloader"""
     
-    ## All podcast
     for link in LINKS_ALL:
         podcast_obj = podcast.Podcast(link)
         podcast_obj.get_links_all(MAX_DOWNLOADS)
