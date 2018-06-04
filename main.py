@@ -1,5 +1,5 @@
 """ Testing podcast downloader"""
-from podcast import podcast
+from modules import podcast
 
 
 MAX_DOWNLOADS = 5
