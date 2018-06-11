@@ -1,4 +1,8 @@
 # podcast_mgmt
-podcast rss downloader
 
-by Mencho 2017
+A podcast rss downloader. Easy, simple and made with Python.
+
+## Detail info
+
+@_manuelmenchaca 2017
+
